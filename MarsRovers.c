@@ -15,9 +15,11 @@ int main () {
 	char resp = '\0';
 	int error = 0;
 	
-	
+	do {
 	printf ("Enter the upper-right coordinates of the plateau (must be integers): ");
-	scanf ("%d %d", &px, &py);
+	if ((error = scanf ("%d %d", &px, &py)) != 2) printf ("\nERROR: Input value must be a integer.\n\n");
+	getchar ();
+	} while (error != 2);
 	
 	rover = malloc (sizeof(struct MarsRover));
 	
@@ -26,8 +28,11 @@ int main () {
 		rover = realloc (rover, (s+1)*sizeof(struct MarsRover)); //dynamic memory allocation, changes for each new rover
 		
 		do { //forbids user to enter inconsistent values
+			do {
 			printf ("\n\nEnter coordinates x, y and the orientation (N, S, E or W) for Rover %d: ", s+1);
-			scanf ("%d %d %c", &x, &y, &facing);
+			if ((error = scanf ("%d %d %c", &x, &y, &facing))!=3) printf ("\nERROR: Input value of x and y must be a integers, and orientation must be a character.\n\n");
+			getchar ();
+		} while (error != 3);
 			
 			if ((error = rover_plateau_check (x, px, y, py) )!= 0) ERROR1; //checks if Rover position is inside the plateu
 			if (facing == 'N' || facing == 'S' || facing == 'E' || facing == 'W' ); //checks if facing input is consistent
