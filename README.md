@@ -20,8 +20,10 @@ All 3 inputs are separated by space.
 
 The program will output a ERROR message if:
 
-. Rover input position is outsite of the plateau range;
-. Orientation input is not 'N', 'S', 'E' or 'W';
-. Comand string include char that are not 'L', 'R' or 'M';
-. Rover comand sends it outside of the plateau;
-. Rover comand put it into collision with another Rover;
+. Any input value type is different from expected -> Program will request re-input.
+. Rover input position is outsite of the plateau range -> Program will request re-input.
+. Orientation input is not 'N', 'S', 'E' or 'W' -> Program will request re-input.
+. Comand string include char that are not 'L', 'R' or 'M' -> Program will request re-input.
+. Rover comand sends it outside of the plateau -> Rover movement will stop.
+. Rover comand put it into collision with another Rover -> Rover movement will stop.
+. Initial position of a Rover coincides with final position of previous Rover -> Program will request re-input.

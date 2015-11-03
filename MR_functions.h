@@ -1,9 +1,10 @@
 /*defining different possible errors*/
+#define ERROR0 printf ("\nERROR: Input values type is inconsistent with expected value.\n\n"); getchar()
 #define ERROR1 printf ("\nERROR: Rover coordinates make it outside of the plateau.\n")
 #define ERROR2 printf ("\nERROR: Rover orientation must be N, S, E, W.\n")
 #define ERROR3 printf ("\nERROR: Rover commands must be 'L', 'R', or 'M'.\n")
 #define ERROR4 printf ("\nERROR: Comand input %d of Rover %d sends it outside of the plateau. Rover %d stopped.\n", i+1, n+1, n+1)
-#define ERROR5 printf ("\nERROR: Comand %d of Rover %d sends it to colide with Rover %d. Rover %d controller stopped.\n", i+1, n+1, j+1, n+1)
+#define ERROR5 printf ("\nERROR: Comand %d of Rover %d sends it to colide with Rover %d. Rover %d controller stopped.\n", i+1, n+1, error, n+1)
 
 struct MarsRover { //struct to represent a Rover
 	int xi,yi;
@@ -64,12 +65,11 @@ int rover_comands_check (char *comands){ //chefk if comands input for Rover are 
 	return error;
 }
 
-int rover_pos_check (int x, int y, int i, int n) { //check relative position between a Rover and all others
+int rover_pos_check (int x, int y, int n) { //check relative position between a Rover and all others
 	int j, error = 0;
 	
-	for (j=0;j<s; j++){
-		if (j!=n && (x == rover[j]->xf && y == rover[j]->yf) ){
-			ERROR5;
+	for (j=0;j<n; j++){
+		if ((x == rover[j]->xf && y == rover[j]->yf) ){
 			error = j+1;
 		}
 	}
@@ -78,6 +78,15 @@ int rover_pos_check (int x, int y, int i, int n) { //check relative position bet
 }
 struct MarsRover *rover_controller (struct MarsRover *rover, int n, int px, int py){ //control Rover movements
 	int i=0, error = 0;
+	
+	while ((error = rover_pos_check (rover->xf, rover->yf, n)) != 0) {
+		printf ("\nERROR: Initial position of Rover %d is coinciding with final position of Rover %d.", n+1, error);
+		do{
+			printf ("\nPlease enter another initial position (x y) for Rover %d: ", n+1);
+			if ( (error = scanf ("%d %d", &rover->xi, &rover->yi) ) != 2){ ERROR0;	}
+			} while (error != 2);
+		rover->xf = rover->xi ; rover->yf = rover->yi;
+	}
 	
 	while (rover->comands[i] != '\0'){ //execute until end of "comands" string
 		switch (rover->comands[i]){
@@ -89,7 +98,10 @@ struct MarsRover *rover_controller (struct MarsRover *rover, int n, int px, int 
 							ERROR4;
 							break;
 						}
-						else if ((error = rover_pos_check (rover->xf, rover->yf + 1, i, n) ) != 0) break;//checks if comand will lead the Rover to colide with another Rover. Ends the movement if so.
+						else if ((error = rover_pos_check (rover->xf, rover->yf + 1, n) ) != 0) {//checks if comand will lead the Rover to colide with another Rover. Ends the movement if so.
+							ERROR5;
+							break;
+						}
 						rover->yf++;
 						break;
 						
@@ -98,7 +110,10 @@ struct MarsRover *rover_controller (struct MarsRover *rover, int n, int px, int 
 							ERROR4;
 							break;
 						}
-						else if ((error = rover_pos_check (rover->xf +1, rover->yf, i, n) )!= 0) break;
+						else if ((error = rover_pos_check (rover->xf +1, rover->yf, n) )!= 0) {
+							ERROR5;
+							break;
+						}
 						rover->xf++;
 						break;
 					
@@ -107,7 +122,10 @@ struct MarsRover *rover_controller (struct MarsRover *rover, int n, int px, int 
 							ERROR4;
 							break;
 						}
-						else if ((error = rover_pos_check (rover->xf, rover->yf - 1, i, n) )!= 0) break;
+						else if ((error = rover_pos_check (rover->xf, rover->yf - 1, n) )!= 0) {
+							ERROR5;
+							break;
+						}
 						rover->yf--;
 						break;
 						
@@ -116,7 +134,10 @@ struct MarsRover *rover_controller (struct MarsRover *rover, int n, int px, int 
 							ERROR4;
 							break;
 						}
-						else if ((error = rover_pos_check (rover->xf - 1, rover->yf, i, n) )!= 0) break;
+						else if ((error = rover_pos_check (rover->xf - 1, rover->yf, n) )!= 0) {
+							ERROR5;
+							break;
+						}
 						rover->xf--;
 						break;
 						

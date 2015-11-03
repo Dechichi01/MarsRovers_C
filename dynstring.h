@@ -36,7 +36,7 @@ char dyngets (char *buffer, int initsize){ //reads input string of variable size
 			buffer[i] = ch;
 		}
 		else {
-			buffer[i]=ch;		
+			buffer[i] = ch;		
 		}
 		i++;
 	}

@@ -7,6 +7,7 @@
 
 #define INITSIZE 10
 
+
 int main () {
 	
 	int x, y; char facing; char *comands; //variables related to creating Rover structure
@@ -17,10 +18,9 @@ int main () {
 	
 	do {
 	printf ("Enter the upper-right coordinates of the plateau (must be integers): ");
-	if ((error = scanf ("%d %d", &px, &py)) != 2) printf ("\nERROR: Input value must be a integer.\n\n");
-	getchar ();
+	if ((error = scanf ("%d %d", &px, &py)) != 2) { ERROR0;	}
 	} while (error != 2);
-	
+
 	rover = malloc (sizeof(struct MarsRover));
 	
 	while (resp != '\n'){ //loop for user input
@@ -30,8 +30,7 @@ int main () {
 		do { //forbids user to enter inconsistent values
 			do {
 			printf ("\n\nEnter coordinates x, y and the orientation (N, S, E or W) for Rover %d: ", s+1);
-			if ((error = scanf ("%d %d %c", &x, &y, &facing))!=3) printf ("\nERROR: Input value of x and y must be a integers, and orientation must be a character.\n\n");
-			getchar ();
+			if ((error = scanf ("%d %d %c", &x, &y, &facing))!=3) { ERROR0;	}
 		} while (error != 3);
 			
 			if ((error = rover_plateau_check (x, px, y, py) )!= 0) ERROR1; //checks if Rover position is inside the plateu
